@@ -1,0 +1,36 @@
+<body>
+  <header>
+    <nav>
+      <h1><a href="/">Restaurant Reviews</a></h1>
+    </nav>
+  </header>
+
+  <main id="maincontent">
+    <section id="map-container">
+      <div id="map" role="application"></div>
+    </section>
+    <section>
+      <div class="filter-options">
+        <h2>Filter Results</h2>
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="filter results by neighvorhood.">
+          <option value="all">All Neighborhoods</option>
+        </select>
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="filter results by Cuisines.">
+          <option value="all">All Cuisines</option>
+        </select>
+      </div>
+      <nav aria-label="breadcrumb">
+        <ul id="restaurants-list"></ul>
+      </nav>
+    </section>
+  </main>
+  <footer id="footer">
+    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+  </footer>
+</body>
+<!--SCRIPTS-->
+<script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
+<script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANOd9Oib5WYqHXnL-BnhGnw3nhV8kQcFU&libraries=places&callback=initMap"></script>
+<!--SCRIPTS END-->
+</html>

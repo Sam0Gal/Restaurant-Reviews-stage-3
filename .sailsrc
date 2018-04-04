@@ -1,6 +1,8 @@
 {
   "generators": {
-    "modules": {}
+    "modules": {
+      "gulp": "sails-generate-gulp"
+    }
   },
   "hooks": {
     "grunt": false
