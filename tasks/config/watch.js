@@ -17,13 +17,19 @@ module.exports = function(gulp, plugins, growl) {
   // NOTE This watcher is set-up by the sails-hook-autoreload NPM package
 
   // Watch assets
+
+  var browserSync = require('browser-sync').create();
+  browserSync.init({
+    proxy: 'localhost:1337'
+  });
+
   gulp.task('watch:assets', function() {
-    gulp.watch(['assets/**/*', 'tasks/pipeline.js'], ['syncAssets']);
+    gulp.watch(['assets/**/*', 'tasks/pipeline.js'], ['copy:dev']).on('change', browserSync.reload);
   });
 
   // Watch views
   gulp.task('watch:views', function() {
-    gulp.watch(['views/*', 'views/**/*'], ['reload']);
+    gulp.watch(['views/*', 'views/**/*'], ['copy:dev']).on('change', browserSync.reload);
   });
 
 };

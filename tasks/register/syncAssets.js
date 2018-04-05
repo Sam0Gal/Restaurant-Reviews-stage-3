@@ -6,7 +6,6 @@ module.exports = function (gulp, plugins) {
       // 'sync:dev',
       'compileAssets',
       'images',
-      'linkAssets',
       cb
     );
   });

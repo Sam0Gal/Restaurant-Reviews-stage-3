@@ -3,8 +3,6 @@ module.exports = function (gulp, plugins) {
     plugins.sequence(
       'compileAssets:prod',
       'concat:prod',
-      'sails-linker-gulp:prodAssets',
-      'sails-linker-gulp:prodViews',
       'images:prod',
       cb
     );

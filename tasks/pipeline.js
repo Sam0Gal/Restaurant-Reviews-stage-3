@@ -16,7 +16,7 @@ module.exports.modulesToCopy = [
 
 // CSS files to inject in order
 var cssFilesToInject = [
-  'styles/index.css'
+  // 'styles/index.css'
 ];
 
 // Client-side javascript files to inject in order
@@ -24,14 +24,14 @@ var cssFilesToInject = [
 var jsFilesToInject = [
 
   // Load sails.io before everything else
-  'js/dependencies/sails.io.js',
+  // 'js/dependencies/sails.io.js',
 
   // Project dependencies as jQuery, Bootstrap, AngularJS, ...
-  'js/dependencies/**/*.js'
+  // 'js/dependencies/**/*.js'
 
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
-  //'js/**/*.js'
+  'js/**/*.js'
 ];
 
 
@@ -45,8 +45,8 @@ var jsFilesToInject = [
 // templates get spit out to the same file.  Be sure and check out `tasks/README.md`
 // for information on customizing and installing new tasks.
 var templateFilesToInject = [
-  'templates/**/*.html',
-  'templates/**/*.handlebars'
+  // 'templates/**/*.html',
+  // 'templates/**/*.handlebars'
 ];
 
 // Prefix relative paths to source files so they point to the proper locations
