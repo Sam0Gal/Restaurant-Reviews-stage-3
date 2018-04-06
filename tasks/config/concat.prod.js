@@ -8,27 +8,42 @@
  *
  */
 module.exports = function(gulp, plugins, growl) {
+// var uglify = plugins.uglify.default;
+// gulp.task('concat:js', function() {
+  //   return gulp.src(require('../pipeline').jsFilesToInject)
+  //     //.pipe(plugins.jshint('.jshintrc'))
+  //     //.pipe(plugins.jshint.reporter('default'))
+  //     .pipe(plugins.concat('production.js'))
+  //     .pipe(plugins.rename({ suffix: '.min' }))
+  //     .pipe(uglify(/* {mangle: true} */))
+  //     .pipe(gulp.dest('./.tmp/public/concat'))
+  //     .pipe(plugins.if(growl, plugins.notify({ message: 'Concatenate Scripts task complete' })));
+  // });
+  var uglify = require('gulp-uglify-es').default;
 
-  gulp.task('concat:js', function() {
-    return gulp.src(require('../pipeline').jsFilesToInject)
+  gulp.task('concat:prod', ['copy:build'], function() {
+    gulp.src(require('../pipeline').jsFilesToInjectHome)
       //.pipe(plugins.jshint('.jshintrc'))
       //.pipe(plugins.jshint.reporter('default'))
-      .pipe(plugins.concat('production.js'))
+      // .pipe(plugins.babel({
+      //   presets: ['env']
+      // }))
+      .pipe(plugins.concat('productionHome.js'))
       .pipe(plugins.rename({ suffix: '.min' }))
-      .pipe(plugins.uglify(/* {mangle: true} */))
-      .pipe(gulp.dest('./.tmp/public/concat'))
-      .pipe(plugins.if(growl, plugins.notify({ message: 'Concatenate Scripts task complete' })));
-  });
+      .pipe(uglify(/* {mangle: true} */))
+      .pipe(gulp.dest('./.tmp/public/concat'));
 
-  gulp.task('concat:prod', function() {
-    return gulp.src(require('../pipeline').jsFilesToInject)
+
+    return gulp.src(require('../pipeline').jsFilesToInjectInfo)
       //.pipe(plugins.jshint('.jshintrc'))
       //.pipe(plugins.jshint.reporter('default'))
-      .pipe(plugins.concat('production.js'))
+      // .pipe(plugins.babel({
+      //   presets: ['env']
+      // }))
+      .pipe(plugins.concat('productionInfo.js'))
       .pipe(plugins.rename({ suffix: '.min' }))
-      .pipe(plugins.uglify(/* {mangle: true} */))
+      .pipe(uglify(/* {mangle: true} */))
       .pipe(gulp.dest('./.tmp/public/concat'));
   });
 
 };
-

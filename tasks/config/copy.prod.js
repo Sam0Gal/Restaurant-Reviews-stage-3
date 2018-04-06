@@ -24,11 +24,12 @@ module.exports = function(gulp, plugins, growl) {
   });
 
   gulp.task('copy:build', function() {
-    require('../pipeline').modulesToCopy.forEach(function(module) {
-      gulp.src(module.src).pipe(gulp.dest('.tmp/public/' + module.dest));
-    });
-
-    return gulp.src(['./assets/**/*.!(scss)', '!assets/images{,/**}'])
+    // require('../pipeline').modulesToCopy.forEach(function(module) {
+    //   console.log(module);
+    //   gulp.src(module.src).pipe(gulp.dest('.tmp/public/' + module.dest));
+    // });
+                                                                          // to exclude files in js/
+    return gulp.src(['./assets/**!(js)/*.!(scss)', '!assets/images{,/**}'/* , '!./assets/js/*' */])
       .pipe(gulp.dest('.tmp/public'))
   });
 };

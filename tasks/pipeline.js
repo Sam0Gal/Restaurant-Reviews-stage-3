@@ -21,7 +21,7 @@ var cssFilesToInject = [
 
 // Client-side javascript files to inject in order
 // (uses Gulp-style wildcard/glob/splat expressions)
-var jsFilesToInject = [
+var jsFilesToInjectHome = [
 
   // Load sails.io before everything else
   // 'js/dependencies/sails.io.js',
@@ -31,9 +31,16 @@ var jsFilesToInject = [
 
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
-  'js/**/*.js'
+  'js/dbhelper.js',
+  'js/main.js',
 ];
-
+var jsFilesToInjectInfo = [
+  'js/dbhelper.js',
+  'js/restaurant_info.js',
+];
+// var jsFilesToInject = [
+//   'js/**/*.js'
+// ];
 
 // Client-side HTML templates are injected using the sources below
 // The ordering of these templates shouldn't matter.
@@ -55,9 +62,13 @@ var templateFilesToInject = [
 module.exports.cssFilesToInject = cssFilesToInject.map(function(path) {
   return '.tmp/public/' + path;
 });
-module.exports.jsFilesToInject = jsFilesToInject.map(function(path) {
+module.exports.jsFilesToInjectHome = jsFilesToInjectHome.map(function(path) {
   return '.tmp/public/' + path;
 });
+module.exports.jsFilesToInjectInfo = jsFilesToInjectInfo.map(function(path) {
+  return '.tmp/public/' + path;
+});
+
 module.exports.templateFilesToInject = templateFilesToInject.map(function(path) {
   return 'assets/' + path;
 });

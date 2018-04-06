@@ -1,10 +1,23 @@
 module.exports = function (gulp, plugins) {
   gulp.task('default', function(cb) {
     plugins.sequence(
-      'compileAssets',
-      ['images', 'test'],
+      'compileAssets:prod',
+      'concat:prod',
+      ['images'],
       ['watch:assets', 'watch:views'],
+      'browser-sync',
       cb
     );
   });
 };
+// module.exports = function (gulp, plugins) {
+//   gulp.task('prod', function(cb) {
+//     plugins.sequence(
+//       'compileAssets:prod',
+//       'concat:prod',
+//       'images:prod',
+//       'browser-sync',
+//       cb
+//     );
+//   });
+// };

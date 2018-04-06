@@ -142,30 +142,42 @@ createRestaurantHTML = (restaurant) => {
   li.append(picture);
   let imageUrl = DBHelper.imageUrlForRestaurant(restaurant);
 
-  const img_source1 = document.createElement('source');
-  img_source1.media = '(min-width: 600px) and (max-width: 700px)';
-  img_source1.srcset = `${imageUrl}_small2x.jpg`;
+  if (imageUrl === '/img/undefined') {
+    const notAvailable = document.createElement('div');
+    notAvailable.className = 'restaurant-img';
+    const txt = document.createElement('p');
+    txt.append('Image not available.');
 
-  const img_source2 = document.createElement('source');
-  img_source2.srcset = `${imageUrl}_small.jpg, ${imageUrl}_small2x.jpg 2x, ${imageUrl}_small2x.jpg 3x`
+    notAvailable.append(txt);
+    li.append(notAvailable);
+  } else {
+    const img_source1 = document.createElement('source');
+    img_source1.media = '(min-width: 600px) and (max-width: 700px)';
+    img_source1.srcset = `${imageUrl}_small2x.jpg`;
 
-  const img_source3 = document.createElement('source');
-  img_source3.media = '(min-width: 600px) and (max-width: 700px)';
-  img_source3.srcset = `${imageUrl}_small2x.webp`;
+    const img_source2 = document.createElement('source');
+    img_source2.srcset = `${imageUrl}_small.jpg, ${imageUrl}_small2x.jpg 2x, ${imageUrl}_small2x.jpg 3x`
 
-  const img_source4 = document.createElement('source');
-  img_source4.srcset = `${imageUrl}_small.webp, ${imageUrl}_small2x.webp 2x, ${imageUrl}_small2x.webp 3x`
+    const img_source3 = document.createElement('source');
+    img_source3.media = '(min-width: 600px) and (max-width: 700px)';
+    img_source3.srcset = `${imageUrl}_small2x.webp`;
 
-  picture.append(img_source3); // 3 and 4 for browsers that supports  webp formats
-  picture.append(img_source4);
-  picture.append(img_source1);
-  picture.append(img_source2);
+    const img_source4 = document.createElement('source');
+    img_source4.srcset = `${imageUrl}_small.webp, ${imageUrl}_small2x.webp 2x, ${imageUrl}_small2x.webp 3x`
 
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = imageUrl+'_small.jpg';
-  image.alt = `${restaurant.name} restaurant image`;
-  picture.append(image);
+    picture.append(img_source3); // 3 and 4 for browsers that supports  webp formats
+    picture.append(img_source4);
+    picture.append(img_source1);
+    picture.append(img_source2);
+
+    const image = document.createElement('img');
+    image.className = 'restaurant-img';
+    image.src = imageUrl+'_small.jpg';
+    image.alt = `${restaurant.name} restaurant image`;
+    picture.append(image);
+
+  }
+
 
   const name = document.createElement('h3');
   name.innerHTML = restaurant.name;

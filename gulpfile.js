@@ -13,7 +13,7 @@
  */
 var gulp = require('gulp'),
   plugins = require('gulp-load-plugins')({
-    pattern: ['gulp-*', 'merge-*', 'run-*', 'main-*'], // the glob to search for
+    pattern: ['gulp-*', 'merge-*', 'run-*', 'main-*', 'browser-*', 'run-sequence'], // the glob to search for
     replaceString: /\bgulp[\-.]|run[\-.]|merge[\-.]|main[\-.]/, // what to remove from the name of the module when adding it to the context
     camelizePluginName: true, // if true, transforms hyphenated plugins names to camel case
     lazy: true // whether the plugins should be lazy loaded on demand
