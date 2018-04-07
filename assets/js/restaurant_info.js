@@ -59,21 +59,21 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 // picture
   const picture = document.querySelector('picture');
   let imageUrl = DBHelper.imageUrlForRestaurant(restaurant);
-  
+
   const img_source1 = document.createElement('source');
   img_source1.media = '(min-width: 550px)';
   img_source1.srcset = `${imageUrl}_small2x.jpg`;
 
   const img_source2 = document.createElement('source');
   img_source2.srcset = `${imageUrl}_small.jpg, ${imageUrl}_small2x.jpg 2x, ${imageUrl}_small2x.jpg 3x`
-  
+
   const img_source3 = document.createElement('source');
   img_source3.media = '(min-width: 550px)';
   img_source3.srcset = `${imageUrl}_small2x.webp`;
 
   const img_source4 = document.createElement('source');
   img_source4.srcset = `${imageUrl}_small.webp, ${imageUrl}_small2x.webp 2x, ${imageUrl}_small2x.webp 3x`
-  
+
   picture.prepend(img_source2); // 3 and 4 for browsers that supports  webp formats
   picture.prepend(img_source1);
   picture.prepend(img_source4);
@@ -157,8 +157,9 @@ createReviewHTML = (review) => {
   date.innerHTML = review.date;
   reviewer.appendChild(date);
 
-  const rating = document.createElement('p');
-  rating.innerHTML = `Rating: ${review.rating}`;
+  const rating = document.createElement('span');
+  rating.className = 'rating';
+  rating.innerHTML = `${'⭐'.repeat(review.rating)}`;
   reviewer.appendChild(rating);
 
   const comments = document.createElement('p');

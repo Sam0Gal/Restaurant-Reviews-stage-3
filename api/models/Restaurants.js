@@ -17,6 +17,6 @@ module.exports = {
     latlng: {type: 'number'},
     cuisine_type: {type: 'string'},
     operating_hours: {type: 'string'},
-    reviews: {type: 'string'}
+    reviews: {type: 'array'}  // review is an array of objects.
   }
 };

@@ -14,5 +14,8 @@ module.exports = {
     //   res.view('index', {restaurants:restaurants});
     // });
     res.view('index');
+  },
+  restaurantInfo: function(req, res) {
+    res.view('restaurant');
   }
 };

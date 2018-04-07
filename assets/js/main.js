@@ -138,19 +138,20 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
-  const picture = document.createElement('picture');
-  li.append(picture);
   let imageUrl = DBHelper.imageUrlForRestaurant(restaurant);
 
   if (imageUrl === '/img/undefined') {
     const notAvailable = document.createElement('div');
     notAvailable.className = 'restaurant-img';
     const txt = document.createElement('p');
-    txt.append('Image not available.');
+    txt.append('Image\'s not available.');
 
     notAvailable.append(txt);
     li.append(notAvailable);
   } else {
+    const picture = document.createElement('picture');
+    li.append(picture);
+
     const img_source1 = document.createElement('source');
     img_source1.media = '(min-width: 600px) and (max-width: 700px)';
     img_source1.srcset = `${imageUrl}_small2x.jpg`;
