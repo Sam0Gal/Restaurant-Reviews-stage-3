@@ -25,7 +25,8 @@ module.exports = function(gulp, plugins, growl) {
   // });
 
   gulp.task('watch:assets', function() {
-    gulp.watch(['assets/**/*', 'tasks/pipeline.js'], ['concat:prod']).on('change', browserSync.reload);
+    gulp.watch(['assets/**!(css)/*', 'tasks/pipeline.js'], ['concat:prod']).on('change', browserSync.reload);
+    gulp.watch('assets/css/*.css', ['min-css']).on('change', browserSync.reload);
   });
 
   // Watch views

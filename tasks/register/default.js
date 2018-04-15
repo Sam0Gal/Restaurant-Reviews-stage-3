@@ -3,6 +3,7 @@ module.exports = function (gulp, plugins) {
     plugins.sequence(
       'compileAssets:prod',
       'concat:prod',
+      'min-css',
       ['images'],
       ['watch:assets', 'watch:views'],
       'browser-sync',

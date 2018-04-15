@@ -16,7 +16,7 @@ module.exports.modulesToCopy = [
 
 // CSS files to inject in order
 var cssFilesToInject = [
-  // 'styles/index.css'
+  'css/styles.css'
 ];
 
 // Client-side javascript files to inject in order
