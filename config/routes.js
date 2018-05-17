@@ -32,15 +32,15 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    // view: 'index'
-    controller: 'RestaurantsController',
-    action: 'view'
-  },
-  '/restaurant': {
-    controller: 'RestaurantsController',
-    action: 'restaurantInfo'
-  }
+  // '/': {
+  //   view: 'index'
+  //   // controller: 'RestaurantsController',
+  //   // action: 'view'
+  // },
+  // '/restaurant': {
+  //   controller: 'RestaurantsController',
+  //   action: 'restaurantInfo'
+  // }
 
   /***************************************************************************
   *                                                                          *
