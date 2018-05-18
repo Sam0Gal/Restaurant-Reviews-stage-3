@@ -31,7 +31,7 @@ module.exports = function(gulp, plugins, growl) {
 
   // Watch views
   gulp.task('watch:views', function() {
-    gulp.watch(['views/*', 'views/**/*'], ['concat:prod']).on('change', browserSync.reload);
+    gulp.watch(['views/*', 'views/**/*']).on('change', browserSync.reload);
   });
 
 };

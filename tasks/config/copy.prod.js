@@ -28,8 +28,11 @@ module.exports = function(gulp, plugins, growl) {
     //   console.log(module);
     //   gulp.src(module.src).pipe(gulp.dest('.tmp/public/' + module.dest));
     // });
-                                                                          // to exclude files in js/
-    return gulp.src(['./assets/**!(js)/*.!(scss)', '!assets/images{,/**}'/* , '!./assets/js/*' */])
-      .pipe(gulp.dest('.tmp/public'))
+
+    gulp.src(['assets/*.html'])
+      .pipe(plugins.gzip({gzipOptions: {level: 9}}))
+      .pipe(gulp.dest('.tmp/public'));
+    return gulp.src(['./assets/**!(js)/*.!(scss)', '!assets/images{,/**}', 'assets/*.html'])
+    .pipe(gulp.dest('.tmp/public'));
   });
 };
