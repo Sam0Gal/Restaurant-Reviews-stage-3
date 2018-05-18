@@ -30,7 +30,7 @@ module.exports = function(gulp, plugins, growl) {
     // });
 
     gulp.src(['assets/*.html'])
-      .pipe(plugins.gzip({gzipOptions: {level: 9}}))
+      // .pipe(plugins.gzip({gzipOptions: {level: 9}}))
       .pipe(gulp.dest('.tmp/public'));
     return gulp.src(['./assets/**!(js)/*.!(scss)', '!assets/images{,/**}', 'assets/*.html'])
     .pipe(gulp.dest('.tmp/public'));

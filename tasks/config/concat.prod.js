@@ -32,7 +32,7 @@ module.exports = function(gulp, plugins, growl) {
       .pipe(plugins.rename({ suffix: '.min' }))
       .pipe(uglify(/* {mangle: true} */))
       .pipe(gulp.dest('./.tmp/public/concat'))
-      .pipe(plugins.gzip({gzipOptions: {level: 9}}))
+      // .pipe(plugins.gzip({gzipOptions: {level: 9}}))
       .pipe(gulp.dest('./.tmp/public/concat'));
 
     return gulp.src(require('../pipeline').jsFilesToInjectInfo)
@@ -45,7 +45,7 @@ module.exports = function(gulp, plugins, growl) {
       .pipe(plugins.rename({ suffix: '.min' }))
       .pipe(uglify(/* {mangle: true} */))
       .pipe(gulp.dest('./.tmp/public/concat'))
-      .pipe(plugins.gzip({gzipOptions: {level: 9}}))
+      // .pipe(plugins.gzip({gzipOptions: {level: 9}}))
       .pipe(gulp.dest('./.tmp/public/concat'));
   });
 

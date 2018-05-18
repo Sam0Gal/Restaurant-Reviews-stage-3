@@ -13,7 +13,6 @@
 
 var connect = require('connect');
 var gzipStatic = require('connect-gzip-static');
-
 module.exports.http = {
 
   /****************************************************************************
@@ -47,8 +46,8 @@ module.exports.http = {
       'poweredBy',
       '$custom',
       'router',
-      'serveStaticGzip',    // for compressing
-      // 'www',
+      // 'serveStaticGzip',    // for compressing           THIS IS ANOTHER WAY OF COMPRESSION
+      'www',
       'favicon',
       '404',
       '500'
@@ -59,12 +58,14 @@ module.exports.http = {
   * Example custom middleware; logs each request to the console.              *
   *                                                                           *
   ****************************************************************************/
-    serveStaticGzip: connect().use(gzipStatic('/home/elqnny/the restaurant/mws-restaurant-stage-2/.tmp/public')) // only absolute path work!
+    // serveStaticGzip: connect().use(gzipStatic(__dirname + '/../.tmp/public'))
+
     // myRequestLogger: function (req, res, next) {
     //     console.log("Requested :: ", req.method, req.url);
     //     return next();
     // }
 
+    compress: require('compression')()
 
   /***************************************************************************
   *                                                                          *
