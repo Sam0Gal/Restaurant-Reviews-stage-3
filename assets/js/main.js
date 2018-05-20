@@ -129,6 +129,8 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
+  // Lazy load images.
+  new LazyLoad();
   addMarkersToMap();
 }
 
@@ -154,17 +156,17 @@ createRestaurantHTML = (restaurant) => {
 
     const img_source1 = document.createElement('source');
     img_source1.media = '(min-width: 600px) and (max-width: 700px)';
-    img_source1.srcset = `${imageUrl}_small2x.jpg`;
+    img_source1.dataset.srcset = `${imageUrl}_small2x.jpg`;
 
     const img_source2 = document.createElement('source');
-    img_source2.srcset = `${imageUrl}_small.jpg, ${imageUrl}_small2x.jpg 2x, ${imageUrl}_small2x.jpg 3x`
+    img_source2.dataset.srcset = `${imageUrl}_small.jpg, ${imageUrl}_small2x.jpg 2x, ${imageUrl}_small2x.jpg 3x`
 
     const img_source3 = document.createElement('source');
     img_source3.media = '(min-width: 600px) and (max-width: 700px)';
-    img_source3.srcset = `${imageUrl}_small2x.webp`;
+    img_source3.dataset.srcset = `${imageUrl}_small2x.webp`;
 
     const img_source4 = document.createElement('source');
-    img_source4.srcset = `${imageUrl}_small.webp, ${imageUrl}_small2x.webp 2x, ${imageUrl}_small2x.webp 3x`
+    img_source4.dataset.srcset = `${imageUrl}_small.webp, ${imageUrl}_small2x.webp 2x, ${imageUrl}_small2x.webp 3x`
 
     picture.append(img_source3); // 3 and 4 for browsers that supports  webp formats
     picture.append(img_source4);
@@ -173,7 +175,7 @@ createRestaurantHTML = (restaurant) => {
 
     const image = document.createElement('img');
     image.className = 'restaurant-img';
-    image.src = imageUrl+'_small.jpg';
+    image.dataset.src = imageUrl+'_small.jpg';
     image.alt = `${restaurant.name} restaurant image`;
     picture.append(image);
 
@@ -238,6 +240,7 @@ function skipMap2(e) {
     }
   }
 }
+
 // The Service Worker
 // if (navigator.serviceWorker) {
 //   window.addEventListener('load', function() {

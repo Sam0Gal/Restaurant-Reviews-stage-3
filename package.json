@@ -22,7 +22,8 @@
     "sails": "^0.12.13",
     "sails-disk": "~0.10.9",
     "sails-generate-gulp": "^1.0.1",
-    "sails-hook-gulp": "0.0.1"
+    "sails-hook-gulp": "0.0.1",
+    "vanilla-lazyload": "^8.7.1"
   },
   "scripts": {
     "debug": "node debug app.js",
