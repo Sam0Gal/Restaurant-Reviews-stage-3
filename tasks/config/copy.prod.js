@@ -29,9 +29,9 @@ module.exports = function(gulp, plugins, growl) {
     //   gulp.src(module.src).pipe(gulp.dest('.tmp/public/' + module.dest));
     // });
 
-    gulp.src(['assets/*.html'])
+    // gulp.src(['assets/*.html'])
       // .pipe(plugins.gzip({gzipOptions: {level: 9}}))
-      .pipe(gulp.dest('.tmp/public'));
+      // .pipe(gulp.dest('.tmp/public'));
     return gulp.src(['./assets/**!(js)/*.!(scss)', '!assets/images{,/**}', 'assets/*.html'])
     .pipe(gulp.dest('.tmp/public'));
   });
