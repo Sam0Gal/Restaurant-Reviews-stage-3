@@ -11,8 +11,8 @@
 // const express = require('express');
 // const expressStaticGzip = require("express-static-gzip");
 
-var connect = require('connect');
-var gzipStatic = require('connect-gzip-static');
+// var connect = require('connect');
+// var gzipStatic = require('connect-gzip-static');
 module.exports.http = {
 
   /****************************************************************************

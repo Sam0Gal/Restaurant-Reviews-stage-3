@@ -16,6 +16,7 @@
     "gulp-linker": "^0.1.7",
     "gulp-load-plugins": "^0.6.0",
     "gulp-rename": "^1.2.2",
+    "idb": "^2.1.2",
     "include-all": "^1.0.0",
     "rc": "1.0.1",
     "rimraf": "^2.5.1",

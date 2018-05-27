@@ -6,7 +6,7 @@ module.exports = function (gulp, plugins) {
       'min-css',
       ['images'],
       ['watch:assets', 'watch:views'],
-      // 'browser-sync',
+      // 'browser-sync',   // for development only.
       cb
     );
   });

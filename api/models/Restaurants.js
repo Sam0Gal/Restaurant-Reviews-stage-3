@@ -8,7 +8,6 @@
 module.exports = {
 
   attributes: {
-    restaurants: {type: 'string', required: true},
     id: {type: 'number', required: true},
     name: {type: 'string', required: true},
     neighborhood: {type: 'string'},

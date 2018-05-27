@@ -19,10 +19,7 @@ module.exports = function(gulp, plugins, growl) {
   // Watch assets
 
   var browserSync = plugins.browserSync;
-  // browserSync.create();
-  // browserSync.init({
-  //   proxy: 'localhost:1337'
-  // });
+
 
   gulp.task('watch:assets', function() {
     gulp.watch(['assets/**!(css)/*', 'tasks/pipeline.js'], ['concat:prod']).on('change', browserSync.reload);
@@ -31,7 +28,11 @@ module.exports = function(gulp, plugins, growl) {
 
   // Watch views
   gulp.task('watch:views', function() {
-    gulp.watch(['views/*', 'views/**/*']).on('change', browserSync.reload);
+    gulp.watch(['assets/sw.js', 'assets/*.html']).on('change', function() {
+      gulp.src(['assets/*.html', 'assets/sw.js'])
+          .pipe(gulp.dest('.tmp/public'));
+        return plugins.browserSync.reload;
+    });
   });
 
 };

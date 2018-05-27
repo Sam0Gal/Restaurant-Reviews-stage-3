@@ -125,7 +125,7 @@ nav h1 a {
 /* Add a color to all links inside the list */
 
 #breadcrumb li a {
-  color: #0275d8;
+  color: #024D92;
   text-decoration: none;
 }
 
@@ -216,9 +216,7 @@ nav h1 a {
   padding-bottom: 1pt;
 }
 
-.inside table tr:nth-of-type(odd) {
-  background-color: #deb0006e;
-}
+
 
 .inside #reviews-container ul li .reviewer {
   background-color: #2a2f33;

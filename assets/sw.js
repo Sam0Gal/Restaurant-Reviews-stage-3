@@ -1,11 +1,11 @@
-let CACHE_NAME = 'cache-v8'
-let URLs = [
+let CACHE_NAME = 'cache-v9',
+    URLs = [
     '/index.html',
     '/restaurant.html',
     '/css/styles.css',
     '/css/info.css',
-    '/concat/productionHome.min.js',
-    '/concat/productionInfo.min.js',
+    '/js/productionHome.min.js',
+    '/js/productionInfo.min.js',
     '/js/lazyload.min.js',
     '/js/idb.js'
 ]
