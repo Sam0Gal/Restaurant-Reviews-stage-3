@@ -1,6 +1,7 @@
 let CACHE_NAME = 'cache-v8'
 let URLs = [
     '/index.html',
+    '/restaurant.html',
     '/css/styles.css',
     '/css/info.css',
     '/concat/productionHome.min.js',
@@ -22,6 +23,10 @@ self.addEventListener('fetch', function(event) {
 
   if (requestUrl.origin === location.origin) {
     if (requestUrl.pathname === '/restaurants') {
+      return;
+    }
+    if (requestUrl.pathname === '/restaurant.html') {
+      event.respondWith(caches.match('/restaurant.html'));
       return;
     }
   }
