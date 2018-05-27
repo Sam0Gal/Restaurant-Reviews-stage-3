@@ -1,6 +1,14 @@
 /**
  * Common database helper functions.
  */
+let dbPromise = idb.open('restaurants reviews', 1, function(upgradeDb) {
+  upgradeDb.createObjectStore('restaurants', {
+    keyPath: 'id'
+  });
+
+});
+let isCached = false;
+
 class DBHelper {
 
   /**
@@ -15,12 +23,52 @@ class DBHelper {
   /**
    * Fetch all restaurants.
    */
+  static fetchCachedRestaurants(callback) {
+    dbPromise.then(function(db) {
+      const tx = db.transaction('restaurants');
+      const restaurantsStore = tx.objectStore('restaurants');
+      return restaurantsStore.getAll();
+    }).then(function(cached_restaurants) {
+      if (Object.keys(cached_restaurants).length !== 0) {
+        callback(null, cached_restaurants);
+        isCached = true;
+        console.log('data fetched from idb');
+        console.log(isCached);
+      }
+    });
+  }
   static fetchRestaurants(callback) {
+    DBHelper.fetchCachedRestaurants(callback);
+    // let isCached = false;
+    // dbPromise.then(function(db) {
+    //   const tx = db.transaction('restaurants');
+    //   const restaurantsStore = tx.objectStore('restaurants');
+    //   return restaurantsStore.getAll();
+    // }).then(function(cached_restaurants) {
+    //   if (Object.keys(cached_restaurants).length !== 0) {
+    //     callback(null, cached_restaurants);
+    //     isCached = true;
+    //     console.log('data fetched from idb'+cached_restaurants);
+    //     console.log(Object.keys(cached_restaurants).length);
+    //   }
+    // });
+
+    if(isCached) return;
     let xhr = new XMLHttpRequest();
     xhr.open('GET', DBHelper.DATABASE_URL);
     xhr.onload = () => {
       if (xhr.status === 200) { // Got a success response from server!
         const restaurants = JSON.parse(xhr.responseText);
+        dbPromise.then(function(db) {
+          const tx = db.transaction('restaurants', 'readwrite');
+          const restaurantsStore = tx.objectStore('restaurants');
+          restaurants.forEach(restaurant => {
+            restaurantsStore.put(restaurant);
+          });
+        }).then(function() {
+          console.log('data chached.');
+        });
+
         callback(null, restaurants);
       } else { // Oops!. Got an error from server.
         const error = (`Request failed. Returned status of ${xhr.status}`);

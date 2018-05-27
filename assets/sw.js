@@ -1,11 +1,12 @@
-let CACHE_NAME = 'cache-v5'
+let CACHE_NAME = 'cache-v8'
 let URLs = [
-    '/',
+    '/index.html',
     '/css/styles.css',
-    '/js/main.js',
-    '/js/dbhelper.js',
-    '/js/restaurant_info.js',
-    '/data/restaurants.json'
+    '/css/info.css',
+    '/concat/productionHome.min.js',
+    '/concat/productionInfo.min.js',
+    '/js/lazyload.min.js',
+    '/js/idb.js'
 ]
 
 self.addEventListener('install', function(event) {
@@ -17,12 +18,19 @@ self.addEventListener('install', function(event) {
     );
 });
 self.addEventListener('fetch', function(event) {
-    event.respondWith(
+  var requestUrl = new URL(event.request.url);
+
+  if (requestUrl.origin === location.origin) {
+    if (requestUrl.pathname === '/restaurants') {
+      return;
+    }
+  }
+  event.respondWith(
         caches.match(event.request)
             .then(function(response) {
                 if (response)
                     return response;
-                
+
                 let clonedRequest = event.request.clone();
                 return fetch(clonedRequest)
                     .then(function(response) {

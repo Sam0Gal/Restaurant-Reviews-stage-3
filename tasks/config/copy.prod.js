@@ -13,6 +13,8 @@
  */
 
 module.exports = function(gulp, plugins, growl) {
+  var runSequence = require('run-sequence');
+
   gulp.task('copy:dev', function() {
     require('../pipeline').modulesToCopy.forEach(function(module) {
       gulp.src(module.src).pipe(gulp.dest('.tmp/public/' + module.dest));
@@ -24,15 +26,15 @@ module.exports = function(gulp, plugins, growl) {
   });
 
   gulp.task('copy:build', function() {
-    // require('../pipeline').modulesToCopy.forEach(function(module) {
-    //   console.log(module);
-    //   gulp.src(module.src).pipe(gulp.dest('.tmp/public/' + module.dest));
-    // });
-
     // gulp.src(['assets/*.html'])
       // .pipe(plugins.gzip({gzipOptions: {level: 9}}))
       // .pipe(gulp.dest('.tmp/public'));
-    return gulp.src(['./assets/**!(js)/*.!(scss)', '!assets/images{,/**}', 'assets/*.html'])
+    return gulp.src(['./assets/**!(js)/*.!(scss)', '!assets/images{,/**}', 'assets/*.html', 'assets/sw.js'])
     .pipe(gulp.dest('.tmp/public'));
   });
+  gulp.task('copy:watch', function() {
+        gulp.src(['assets/*.html', 'assets/sw.js'])
+          .pipe(gulp.dest('.tmp/public'));
+        return plugins.browserSync.reload;
+  })
 };
