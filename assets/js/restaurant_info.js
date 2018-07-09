@@ -6,6 +6,10 @@ var newMap;
 /**
  * Initialize leaflet map
  */
+document.addEventListener('DOMContentLoaded', (event) => {
+  initMap();
+});
+
 initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
