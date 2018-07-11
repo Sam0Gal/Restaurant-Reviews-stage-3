@@ -13,10 +13,17 @@ if (navigator.serviceWorker) {
   });
 }
 
-let dbPromise = idb.open("restaurants reviews", 1, function(upgradeDb) {
-  upgradeDb.createObjectStore("restaurants", {
+let dbPromise = idb.open("restaurants reviews", 2, function(upgradeDb) {
+  switch(upgradeDb.oldVersion) {
+    case 0:
+    upgradeDb.createObjectStore("restaurants", {
     keyPath: "id"
-  });
+    });
+    case 1:
+    upgradeDb.createObjectStore('reviews', {
+      keyPath: "id"
+    });
+  }
 });
 let isCached = false;
 
@@ -27,7 +34,7 @@ class DBHelper {
    */
   static get DATABASE_URL() {
     const port = 1337; // Change this to your server port
-    return `http://localhost:${port}/restaurants`;
+    return `http://localhost:${port}/`;
   }
 
   /**
@@ -49,7 +56,7 @@ class DBHelper {
         }
         if (isCached) return;
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", DBHelper.DATABASE_URL);
+        xhr.open("GET", DBHelper.DATABASE_URL + 'restaurants');
         xhr.onload = () => {
           if (xhr.status === 200) {
             // Got a success response from server!
@@ -96,6 +103,52 @@ class DBHelper {
         }
       }
     });
+  }
+
+  static fetchReviews(restaurant_id, callback) {
+    let isCached = false;
+    dbPromise.then(function(db) {
+      const tx = db.transaction('reviews');
+      const reviews = tx.objectStore('reviews');
+      return reviews.getAll(restaurant_id);
+    }).then(function(cached_reviews) {
+      if (Object.keys(cached_reviews).length != 0) {
+        callback(null, cached_reviews);
+        isCached = true;
+        console.log('reviews fetched from idb');
+      }
+      if (isCached) return;
+
+      fetch(DBHelper.DATABASE_URL + `reviews/?restaurant_id=${restaurant_id}`)
+      .then(function(response) {
+        return response.json();
+      }).then(function(reviews) {
+        dbPromise.then(function(db) {
+          const tx = db.transaction('reviews', 'readwrite');
+          const reviewsStore = tx.objectStore('reviews');
+          reviews.forEach(review => {
+            reviewsStore.put(review);
+          });
+        });
+        callback(null, reviews);
+      }).catch(function(error) {
+        callback(error, null);
+      })
+    })
+  }
+
+  static fetchReviewsByRestaurantId(id, callback) {
+    DBHelper.fetchReviews(id, (error, reviews) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        if (reviews) {
+          callback(null, reviews);
+        } else {
+          callback('reviews does not exist', null);
+        }
+      }
+    })
   }
 
   /**

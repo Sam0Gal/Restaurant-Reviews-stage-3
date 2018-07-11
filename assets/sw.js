@@ -1,4 +1,4 @@
-let CACHE_NAME = 'cache-v10',
+let CACHE_NAME = 'cache-v11',
     URLs = [
     '/index.html',
     '/restaurant.html',
@@ -21,8 +21,14 @@ self.addEventListener('install', function(event) {
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
 
+  if (event.request.method == 'POST') {
+    return;
+  }
   if (requestUrl.origin === location.origin) {
     if (requestUrl.pathname === '/restaurants') {
+      return;
+    }
+    if (requestUrl.pathname === '/reviews') {
       return;
     }
     if (requestUrl.pathname === '/restaurant.html') {

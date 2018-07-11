@@ -77,8 +77,17 @@ fetchRestaurantFromURL = callback => {
         console.error(error);
         return;
       }
-      fillRestaurantHTML();
+
+
       callback(null, restaurant);
+    });
+    DBHelper.fetchReviewsByRestaurantId(id, (error, reviews) => {
+      self.reviews = reviews;
+      if (!reviews) {
+        console.error(error);
+        return;
+      }
+      fillRestaurantHTML();
     });
   }
 };
@@ -174,23 +183,23 @@ fillRestaurantHoursHTML = (
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const container = document.getElementById("reviews-container");
-  const title = document.createElement("h4");
-  title.innerHTML = "Reviews";
-  container.appendChild(title);
+fillReviewsHTML = (reviews = self.reviews) => {
+    const container = document.getElementById("reviews-container");
+    const title = document.createElement("h4");
+    title.innerHTML = "Reviews";
+    container.appendChild(title);
 
-  if (!reviews) {
-    const noReviews = document.createElement("p");
-    noReviews.innerHTML = "No reviews yet!";
-    container.appendChild(noReviews);
-    return;
-  }
-  const ul = document.getElementById("reviews-list");
-  reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
-  });
-  container.appendChild(ul);
+    if (!reviews) {
+      const noReviews = document.createElement("p");
+      noReviews.innerHTML = "No reviews yet!";
+      container.appendChild(noReviews);
+      return;
+    }
+    const ul = document.getElementById("reviews-list");
+    reviews.forEach(review => {
+      ul.appendChild(createReviewHTML(review));
+    });
+    container.appendChild(ul);
 };
 
 /**
@@ -206,11 +215,24 @@ createReviewHTML = review => {
 
   const name = document.createElement("p");
   name.innerHTML = review.name;
+  name.classList.add('name');
   reviewer.appendChild(name);
 
-  const date = document.createElement("p");
-  date.innerHTML = review.date;
-  reviewer.appendChild(date);
+  const ceatedAt = document.createElement("p");
+  let date = new Date(parseInt(review.createdAt));
+  let day = date.getUTCDay();
+  let month = date.getUTCMonth();
+  let year = date.getUTCFullYear();
+  ceatedAt.innerHTML = `${day}/${month}/${year}`;
+  reviewer.appendChild(ceatedAt);
+
+  // const updatedAt = document.createElement("p");
+  // date = new Date(parseInt(review.updatedAt));
+  // day = date.getUTCDay();
+  // month = date.getUTCMonth();
+  // year = date.getUTCFullYear();
+  // updatedAt.innerHTML = 'Updated at: ' + `${day}/${month}/${year}`;
+  // reviewer.appendChild(updatedAt);
 
   const rating = document.createElement("span");
   rating.className = "rating";
