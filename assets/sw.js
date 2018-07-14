@@ -1,4 +1,4 @@
-let CACHE_NAME = 'cache-v11',
+let CACHE_NAME = 'cache-v12',
     URLs = [
     '/index.html',
     '/restaurant.html',

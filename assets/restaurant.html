@@ -14,7 +14,7 @@
   <title>Restaurant Info</title>
 </head>
 
-<body class="inside">
+<body>
   <!-- Beginning header -->
   <header>
     <!-- Beginning nav -->
@@ -36,7 +36,7 @@
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map" role="appilcation"></div>
+      <div id="map"></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
@@ -53,6 +53,28 @@
     <!-- Beginning reviews -->
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
+    </section>
+    <section class="form">
+      <h3>Add a review</h3>
+      <form>
+        <label for="name">Name:<br>
+        </label>
+        <input type="text" id="name" placeholder="Name" required maxlength="100" autocomplete="name">
+        <br>
+        <span style="font-size: 1.5rem;">Rate: </span>
+        <div style="cursor: pointer;width: 232px;display: inline-block;" tabindex="0" role="listbox" aria-label="choose rating out of five stars">
+          <span role="option" aria-label="1 star" tabindex="0" class="1">🟊</span>
+          <span role="option" aria-label="2 stars" tabindex="0" class="2">🟊</span>
+          <span role="option" aria-label="3 stars" tabindex="0" class="3">🟊</span>
+          <span role="option" aria-label="4 stars" tabindex="0" class="4">🟊</span>
+          <span role="option" aria-label="5 stars" tabindex="0" class="5">🟊</span>
+        </div>
+        <label for="review">Review:
+        </label>
+        <textarea type="text" id="review" placeholder="Your Review" required maxlength="1000"></textarea>
+        <br>
+        <button type="submit" disabled>submit</button>
+      </form>
     </section>
     <!-- End reviews -->
   </main>

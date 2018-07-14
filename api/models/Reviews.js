@@ -7,12 +7,12 @@
 
 module.exports = {
   attributes: {
-    id: {type: 'number', required: true},
-    restaurant_id: {type: 'number', required: true},
+    id: {type: 'intger', primaryKey: true, autoIncrement: true},
+    restaurant_id: {type: 'string', required: true},
     name: {type: 'string', required: true},
     rating: {type: 'string', required: true},
     comments: {type: 'string', required: true},
-    createdAt: {type: 'number'},
-    updatedAt: {type: 'number'},
+    createdAt: {type: 'string'},
+    updatedAt: {type: 'string'},
   }
 };

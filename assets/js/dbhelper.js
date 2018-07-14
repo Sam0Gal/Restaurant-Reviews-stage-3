@@ -21,7 +21,7 @@ let dbPromise = idb.open("restaurants reviews", 2, function(upgradeDb) {
     });
     case 1:
     upgradeDb.createObjectStore('reviews', {
-      keyPath: "id"
+      keyPath: 'id'
     });
   }
 });
@@ -105,6 +105,24 @@ class DBHelper {
     });
   }
 
+  static updateReviews(restaurant_id, callback) {
+    fetch(DBHelper.DATABASE_URL + `reviews/?restaurant_id=${restaurant_id}`)
+      .then(function(response) {
+        return response.json();
+      }).then(function(reviews) {
+        dbPromise.then(function(db) {
+          const tx = db.transaction('reviews', 'readwrite');
+          const reviewsStore = tx.objectStore('reviews');
+          reviews.forEach(review => {
+            reviewsStore.put(review);
+          });
+          if (callback) callback(null, reviews);
+        }).catch(function(error) {
+          callback(error, null);
+        })
+    })
+  }
+
   static fetchReviews(restaurant_id, callback) {
     let isCached = false;
     dbPromise.then(function(db) {
@@ -119,22 +137,8 @@ class DBHelper {
       }
       if (isCached) return;
 
-      fetch(DBHelper.DATABASE_URL + `reviews/?restaurant_id=${restaurant_id}`)
-      .then(function(response) {
-        return response.json();
-      }).then(function(reviews) {
-        dbPromise.then(function(db) {
-          const tx = db.transaction('reviews', 'readwrite');
-          const reviewsStore = tx.objectStore('reviews');
-          reviews.forEach(review => {
-            reviewsStore.put(review);
-          });
-        });
-        callback(null, reviews);
-      }).catch(function(error) {
-        callback(error, null);
-      })
-    })
+      DBHelper.updateReviews(restaurant_id, callback);
+    });
   }
 
   static fetchReviewsByRestaurantId(id, callback) {
@@ -305,6 +309,33 @@ class DBHelper {
         update.is_favorite = true;
         cursor.update(update);
       }
-    })
+    });
+  }
+  static addNewReview(id, name, date, rating, review) {
+    const theNewReview = {
+      "restaurant_id": parseInt(id),
+      "name": name,
+      "rating": `${rating}`,
+      "comments": review,
+      "createdAt": date
+    };
+
+    fetch(DBHelper.DATABASE_URL + `reviews/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify(theNewReview)
+    }).then(function() {
+      console.log('The review added to the database.');
+      let addReviewToPage = new Promise((resolve, reject) => {
+        DBHelper.updateReviews(id);
+        resolve();
+      });
+      addReviewToPage.then(function() {
+        fillReviewsHTML(theNewReview);
+      });
+    });
+
   }
 }

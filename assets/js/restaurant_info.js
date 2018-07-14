@@ -66,6 +66,9 @@ fetchRestaurantFromURL = callback => {
     return;
   }
   const id = getParameterByName("id");
+// To use when adding a new review.
+  self.id = id;
+
   if (!id) {
     // no id found in URL
     error = "No restaurant id in URL";
@@ -185,9 +188,11 @@ fillRestaurantHoursHTML = (
  */
 fillReviewsHTML = (reviews = self.reviews) => {
     const container = document.getElementById("reviews-container");
-    const title = document.createElement("h4");
-    title.innerHTML = "Reviews";
-    container.appendChild(title);
+    if (!reviews.length) {
+      const title = document.createElement("h4");
+      title.innerHTML = "Reviews";
+      container.appendChild(title);
+    }
 
     if (!reviews) {
       const noReviews = document.createElement("p");
@@ -196,10 +201,16 @@ fillReviewsHTML = (reviews = self.reviews) => {
       return;
     }
     const ul = document.getElementById("reviews-list");
-    reviews.forEach(review => {
-      ul.appendChild(createReviewHTML(review));
-    });
-    container.appendChild(ul);
+    // To add the new review.
+    if (!reviews.length) {
+      ul.appendChild(createReviewHTML(reviews));
+    } else {
+      reviews.forEach(review => {
+        ul.appendChild(createReviewHTML(review));
+      });
+      container.appendChild(ul);
+
+    }
 };
 
 /**
@@ -254,6 +265,37 @@ fillBreadcrumb = (restaurant = self.restaurant) => {
   const li = document.createElement("li");
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
+
+  const favorite = document.createElement('span');
+  favorite.innerHTML = '🟊';
+  favorite.setAttribute('tabindex', '0');
+  favorite.setAttribute('role', 'button');
+  favorite.classList.add('favorite');
+  if (restaurant.is_favorite) {
+    favorite.classList.add('added-to-favorite');
+    favorite.style.color = 'yellow';
+  }
+  favorite.addEventListener('click', function(event) {
+    toggleFavorite(favorite, restaurant.id);
+  });
+  favorite.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      toggleFavorite(favorite, restaurant.id);
+    }
+  });
+
+  function toggleFavorite(favorite, id) {
+    if (favorite.classList.contains('added-to-favorite')) {
+      favorite.classList.remove('added-to-favorite');
+      favorite.style.color = 'rgb(90, 88, 88)';
+    } else {
+      favorite.classList.add('added-to-favorite');
+      favorite.style.color = 'yellow';
+    }
+    DBHelper.updateFavorites(id);
+  }
+
+  breadcrumb.insertAdjacentElement('afterend', favorite);
 };
 
 /**
@@ -271,7 +313,7 @@ getParameterByName = (name, url) => {
 
 // remove focus from google map for keyboard users.
 document
-  .querySelector(".inside #breadcrumb a")
+  .querySelector("#breadcrumb a")
   .addEventListener("keydown", skipMap);
 document
   .querySelector("#restaurant-name")
@@ -290,7 +332,102 @@ function skipMap(e) {
 
 function skipMap2(e) {
   if (e.keyCode === 9 && e.shiftKey) {
-    document.querySelector(".inside #breadcrumb a").focus();
+    document.querySelector("#breadcrumb a").focus();
     e.preventDefault();
   }
 }
+(function selectRating() {
+  let rateChoosed = false;
+  let ratingElements = document.querySelectorAll('form div span');
+  ratingElements = Array.from(ratingElements);
+
+  function chooseRate(i) {
+    self.rating = i + 1;
+    let selectedElements = ratingElements.slice(0, i + 1);
+    for (const selectedElement of selectedElements) {
+      selectedElement.style.color = '#ffe000';
+      selectedElement.classList.add('selected');
+    }
+    let theRest = ratingElements.slice(i + 1);
+    for (const element of theRest) {
+      element.style.color = 'grey';
+      element.classList.remove('selected');
+    }
+    if (!rateChoosed) {
+      document.querySelector('button').removeAttribute('disabled');
+      rateChoosed = true;
+    }
+  }
+
+  function focusOnRate(i) {
+    let selectedElements = ratingElements.slice(0, i + 1);
+      for (const selectedElement of selectedElements) {
+        if (selectedElement.classList.contains('selected')) continue;
+        selectedElement.style.color = '#ffff93';
+      }
+      let theRest = ratingElements.slice(i + 1);
+      for (const element of theRest) {
+        if (element.classList.contains('selected')) continue;
+        element.style.color = 'grey';
+      }
+  }
+
+  // ratingElements = Array.prototype.slice.apply(rating); // to use with forEach()
+  for (let i = 0; i < ratingElements.length; i++) {
+
+    ratingElements[i].addEventListener('mouseover', function(event) {
+      focusOnRate(i);
+    });
+    ratingElements[i].addEventListener('focus', function(event) {
+      focusOnRate(i);
+    });
+    ratingElements[i].addEventListener('focusout', function(event) {
+      let theRest = ratingElements;
+      for (const element of theRest) {
+        if (element.classList.contains('selected')) continue;
+        element.style.color = 'grey';
+      }
+    });
+
+    ratingElements[i].addEventListener('click', function(event) {
+      chooseRate(i);
+
+    });
+    ratingElements[i].addEventListener('keyup', function(event) {
+      if (event.keyCode == 13) {
+        chooseRate(i);
+      }
+    })
+  }
+  const ratingContainer = document.querySelector('form div');
+  ratingContainer.addEventListener('mouseout', function(event) {
+    for (element of ratingElements) {
+      if (element.classList.contains('selected')) continue;
+      element.style.color = 'grey';
+    }
+  });
+
+})();
+
+document.querySelector('form').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  const name = document.querySelector('input');
+  const review = document.querySelector('textarea');
+  const creationDate = Date.now();
+  DBHelper.addNewReview(self.id, name.value, creationDate, self.rating, review.value);
+
+  name.value = '';
+  review.value = '';
+  document.querySelectorAll('form div span').forEach(function(star) {
+    star.style.color = 'grey';
+    star.classList.remove('selected');
+  });
+  self.rating = null;
+});
+document.querySelector('button').addEventListener('click', function(event) {
+  const ratingContainer = document.querySelector('form .validateRate');
+  if (!self.rating) {
+    ratingContainer.setCustomValidity('Please choose rate');
+  }
+});
