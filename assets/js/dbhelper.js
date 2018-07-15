@@ -128,8 +128,9 @@ class DBHelper {
     dbPromise.then(function(db) {
       const tx = db.transaction('reviews');
       const reviews = tx.objectStore('reviews');
-      return reviews.getAll(restaurant_id);
+      return reviews.getAll();
     }).then(function(cached_reviews) {
+      cached_reviews = cached_reviews.filter(review => review.restaurant_id == restaurant_id);
       if (Object.keys(cached_reviews).length != 0) {
         callback(null, cached_reviews);
         isCached = true;
@@ -313,29 +314,50 @@ class DBHelper {
   }
   static addNewReview(id, name, date, rating, review) {
     const theNewReview = {
-      "restaurant_id": parseInt(id),
+      "restaurant_id": id,
       "name": name,
       "rating": `${rating}`,
       "comments": review,
       "createdAt": date
     };
 
-    fetch(DBHelper.DATABASE_URL + `reviews/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-      body: JSON.stringify(theNewReview)
-    }).then(function() {
-      console.log('The review added to the database.');
-      let addReviewToPage = new Promise((resolve, reject) => {
-        DBHelper.updateReviews(id);
-        resolve();
+    if (navigator.onLine) {
+      fetch(DBHelper.DATABASE_URL + `reviews/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify(theNewReview)
+      }).then(function() {
+        console.log('The review added to the database.');
+        let addReviewToPage = new Promise((resolve, reject) => {
+          DBHelper.updateReviews(id);
+          resolve();
+        });
+        addReviewToPage.then(function() {
+          fillReviewsHTML(theNewReview);
+        });
       });
-      addReviewToPage.then(function() {
-        fillReviewsHTML(theNewReview);
-      });
-    });
+    } else {
+      // If user is offline
+      theNewReview.id = Math.floor(Math.random() * 10000000);
+      theNewReview.madeOffline = true;
+      dbPromise.then(function(db) {
+        const tx = db.transaction('reviews', 'readwrite');
+        const reviewsStore = tx.objectStore('reviews');
+        reviewsStore.put(theNewReview);
+      }).then(function() {
+        console.log('Review saved in idb.');
 
+
+        theNewReview.id = undefined;
+        navigator.serviceWorker.controller.postMessage({
+          'theNewReview': theNewReview
+        });
+
+
+      });
+      fillReviewsHTML(theNewReview);
+    }
   }
 }

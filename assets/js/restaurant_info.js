@@ -1,7 +1,10 @@
 let restaurant;
-// var map; google map
 var newMap;
 
+// background sync
+navigator.serviceWorker.ready.then(function(registration) {
+  return registration.sync.register('syncReviews');
+});
 
 /**
  * Initialize leaflet map
@@ -188,7 +191,7 @@ fillRestaurantHoursHTML = (
  */
 fillReviewsHTML = (reviews = self.reviews) => {
     const container = document.getElementById("reviews-container");
-    if (!reviews.length) {
+    if (reviews.length) {
       const title = document.createElement("h4");
       title.innerHTML = "Reviews";
       container.appendChild(title);

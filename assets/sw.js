@@ -1,4 +1,5 @@
-let CACHE_NAME = 'cache-v12',
+importScripts('js/idb.js', 'js/sync.js');
+let CACHE_NAME = 'cache-v13',
     URLs = [
     '/index.html',
     '/restaurant.html',
@@ -58,3 +59,57 @@ self.addEventListener('fetch', function(event) {
             })
         );
 });
+
+onmessage = function(result) {
+  self.newReview = result.data.theNewReview;
+}
+
+self.addEventListener('sync', function(event) {
+  if (event.tag === 'syncReviews') {
+    if (self.newReview != null) {
+      event.waitUntil(addReviewToServer());
+    }
+  }
+});
+
+function addReviewToServer(newReview = self.newReview) {
+  fetch(`http://localhost:1337/reviews/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(newReview)
+  }).then(function() {
+    fetch(`http://localhost:1337/reviews/?madeOffline=true`)
+      .then(function(response) {
+        return response.json();
+      }).then(function(response) {
+        self.reviewID = response[0].id;
+        dbPromise.then(function(db) {
+          const reviewsStore = db.transaction('reviews', 'readwrite').objectStore('reviews');
+          reviewsStore.openCursor().then(function updateTheNewReview(cursor) {
+            if (!cursor) return;
+            if (cursor.value.madeOffline) {
+              response[0].madeOffline = false;
+              self.review = response[0];
+              cursor.delete();
+              reviewsStore.add(response[0]);
+              return;
+            }
+            return cursor.continue().then(updateTheNewReview);
+          }).then(function() {
+            fetch(`http://localhost:1337/reviews/${self.reviewID}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+              },
+              body: JSON.stringify(self.review)
+            }).then(function(text) {
+              console.log('Updating the new review done.', text);
+              self.newReview = null;
+            })
+          })
+        })
+      })
+    });
+};
