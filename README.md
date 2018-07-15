@@ -1,13 +1,4 @@
-# Local Development API Server
-## Usage
-#### Get Restaurants
-```
-curl "http://localhost:1337/restaurants"
-```
-#### Get Restaurants by id
-````
-curl "http://localhost:1337/restaurants/{3}"
-````
+# Restaurant Reviews app
 
 ## Architecture
 Local server
@@ -22,7 +13,6 @@ Local server
 
 ## Getting Started
 
-### Development local API Server
 _Location of server = /server_
 Server depends on [node.js LTS Version: v6.11.2 ](https://nodejs.org/en/download/), [npm](https://www.npmjs.com/get-npm), and [sails.js](http://sailsjs.com/)
 Please make sure you have these installed before proceeding forward.
@@ -43,10 +33,11 @@ Let's start with running commands in your terminal, known as command line interf
 ```Start server
 # node server
 ```
+
+###### OR:
+```
+# sails lift
+```
 ### You should now have access to your API server environment
 debug: Environment : development
 debug: Port        : 1337
-
-
-If you find a bug in the source code or a mistake in the documentation, you can help us by
-submitting an issue to our [Waffle Dashboard](https://waffle.io/udacity/mwnd-issues). Even better you can submit a Pull Request with a fix :)
