@@ -38,6 +38,4 @@ Let's start with running commands in your terminal, known as command line interf
 ```
 # sails lift
 ```
-### You should now have access to your API server environment
-debug: Environment : development
-debug: Port        : 1337
+### Now open http://localhost:1337/ and the app is now running.
